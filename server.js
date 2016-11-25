@@ -2,10 +2,10 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var router = require('./app/routes/routes');
 //Modules import
-var planetModule = require('./app/modules/planet');
-var astronomicModule = require('./app/lib/astronomic');
+var planetModule = require('./app/modules/Planet');
+var astronomicModule = require('./app/lib/Astronomic');
 
-var galaxySeedModule = require('./app/modules/galaxySeed');
+var galaxySeedModule = require('./app/modules/GalaxySeed');
 
 var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
