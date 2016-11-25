@@ -1,7 +1,7 @@
-var Planet = require('../modules/planet');
-var Triangle = require('./triangle');
-var Line = require('./line');
-var Point = require('./line');
+var Planet = require('../modules/Planet');
+var Triangle = require('./Triangle');
+var Line = require('./Line');
+var Point = require('./Line');
 
 var Orbits = function (ferengi, betasoide, vulcano, sun) {
 	this.sun = sun;
