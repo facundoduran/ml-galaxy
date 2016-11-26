@@ -1,4 +1,4 @@
-var Point = require('../modules/Point');
+var Point = require('./Point');
 
 var Line = function (pointA, pointB) {
 	this.pointA = pointA;

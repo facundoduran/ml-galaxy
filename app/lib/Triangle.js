@@ -1,4 +1,4 @@
-var Point = require('../modules/Point');
+var Point = require('./Point');
 
 var Triangle = function (pointA, pointB, pointC) {
 	this.vertexA = pointA;

@@ -1,35 +1,32 @@
-const router = require('express').Router();
+var seedController = require('../controllers/SeedController');
 
-router.get('/', function(req, res) {
-    res.json({ message: 'hooray! welcome to our api!' });   
-});
+var routes = function (weatherController, router) {
+	this.weatherController = weatherController;
+	this.router = router;
+}
 
-router.get('/predict/day/:day', function (req, res) {
-    res.json({ message: 'predict/day' });   
-});
+routes.prototype.getRouter = function() {
+	return this.router;
+}
 
-router.get('/predict/years/:year', function (req, res) {
-	res.json({ message: 'predict/years' });   
-});
+routes.prototype.registerRoutes = function() {
 
-router.get('/predict/getDroughtPeriods', function (req, res) {
-	res.json({ message: 'predict/getDroughtPeriods' });   
-});
+	var weatherController = this.weatherController;
 
-router.get('/predict/getRainPeriods', function (req, res) {
-	res.json({ message: 'predict/getRainPeriods' });   
-});
+	this.router.get('/predict/day/:day', weatherController.predictDay);
 
-router.get('/predict/getMaxPeakRain', function (req, res) {
-	res.json({ message: 'predict/getMaxPeakRain' });   
-});
+	this.router.get('/predict/years/:year', weatherController.predictYears);
 
-router.get('/predict/getOptimalConditions', function (req, res) {
-	res.json({ message: 'predict/getOptimalConditions' });   
-});
+	this.router.get('/predict/getDroughtPeriods', weatherController.getDroughtPeriods);   
 
-router.get('/predict/getMaxTemperature', function (req, res) {
-	res.json({ message: 'predict/getMaxTemperature' });   
-});
+	this.router.get('/predict/getRainPeriods', weatherController.getRainPeriods);
 
-module.exports = router;
+	this.router.get('/predict/getMaxPeakRain', weatherController.getMaxPeakRain);
+
+	this.router.get('/predict/getOptimalConditions', weatherController.getOptimalConditions);
+
+	this.router.post('/seed', seedController.generateData);
+}
+
+
+module.exports = routes;

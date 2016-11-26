@@ -1,0 +1,6 @@
+{
+	"name": "Node.js ml-galaxy",
+	"description": "",
+	"keywords": ["heroku", "nodejs", "mongo", "express"],
+    "repository": "https://github.com/facundoduran/ml-galaxy.git"
+}

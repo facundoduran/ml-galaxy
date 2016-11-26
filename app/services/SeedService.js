@@ -1,50 +1,55 @@
-var PlanetModule = require('./Planet');
-var Point = require('./Point');
+var PlanetModule = require('../modules/Planet');
+var Point = require('../lib/Point');
 var Astronomic = require('../lib/Astronomic');
 var direction = PlanetModule.Direction;
+var forecastConditionsLib = require('../lib/ForecastConst');
+var forecastConditions = forecastConditionsLib.forecastConditions;
 
+const years = 10;
+const daysInYear = 365;
 var sun = new Point(0, 0);
 
-var forecastConditions =  {
-	drought : 'DROUGHT',
-	optimal : 'OPTIMAL',
-	normal : 'NORMAL',
-	rainy : 'RAINY'
-};
-
-var galaxySeed = function () {
+var seedService = function () {
 	this.ferengi = new PlanetModule.Planet('Ferengi', 500, 1, direction.clockwise);
 	this.betasoide = new PlanetModule.Planet('Betasoide', 1000, 3, direction.clockwise);
 	this.vulcano = new PlanetModule.Planet('Vulcano', 2000, 5, direction.counterclockwise);
 	this.astronomic = new Astronomic(this.ferengi, this.betasoide, this.vulcano, sun);
-	this.forecastReport = [];
+	this.predictions = [];
 };
 
-galaxySeed.prototype.generatePredictions = function (days) {
-	var t = 0;
-	var maxArea = 0;
-	var maxDay = 0;
+seedService.prototype.getPredictions = function () {
+	return this.predictions;
+};
 
-	for(t = 1; t <= days; t++) {
-		var ferengiPosition = this.ferengi.getPosition(t);
-		var betasoidePosition = this.betasoide.getPosition(t);
-		var vulcanoPosition = this.vulcano.getPosition(t);
+seedService.prototype.predictAll = function () {
+	var days = years * daysInYear;
+	this.generatePredictions(days);
+}
+
+seedService.prototype.generatePredictions = function (days) {
+	var day = 0;
+	var maxArea = 0;
+
+	for(day = 1; day <= days; day++) {
+		var ferengiPosition = this.ferengi.getPosition(day);
+		var betasoidePosition = this.betasoide.getPosition(day);
+		var vulcanoPosition = this.vulcano.getPosition(day);
 
 		var prediction = this.generatePrediction(ferengiPosition, betasoidePosition, vulcanoPosition);
-		this.saveReport(prediction);
 
 		if (prediction === forecastConditions.rainy) {
 			var area = this.astronomic.getPlanetsArea(ferengiPosition, betasoidePosition, vulcanoPosition);
 
 			if (area > maxArea) {
 				maxArea = area;
-				maxDay = t;
 			}
 		}
+
+		this.predictions.push( {day:day, prediction: prediction, maxPeak: maxArea });
 	}
 };
 
-galaxySeed.prototype.generatePrediction = function(ferengiPosition, betasoidePosition, vulcanoPosition) {
+seedService.prototype.generatePrediction = function(ferengiPosition, betasoidePosition, vulcanoPosition) {
 	if (this.astronomic.arePlanetsAligned(ferengiPosition, betasoidePosition, vulcanoPosition)) {
 		if (this.astronomic.arePlanetsAlignedWithSun(ferengiPosition, betasoidePosition)) {
 			return forecastConditions.drought;
@@ -60,19 +65,4 @@ galaxySeed.prototype.generatePrediction = function(ferengiPosition, betasoidePos
 	return forecastConditions.normal;
 };
 
-galaxySeed.prototype.getReport = function () {
-	return this.forecastReport;
-}
-
-galaxySeed.prototype.saveReport = function (condition) {
-	if (!(condition in this.forecastReport)) {
-		
-		this.forecastReport[condition] = 0
-
-		return;
-	}
-
-	this.forecastReport[condition] = this.forecastReport[condition] + 1;
-};
-
-module.exports = galaxySeed;
+module.exports = new seedService();

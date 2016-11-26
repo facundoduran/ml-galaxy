@@ -1,4 +1,4 @@
-var Point = require('./Point');
+var Point = require('../lib/Point');
 
 var Direction = {
 	clockwise: 1,
