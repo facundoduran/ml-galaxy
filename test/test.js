@@ -8,9 +8,9 @@ describe('Triangle', function() {
     	var vertexA = new Point(4, 10);
     	var vertexB = new Point(4, 0);
     	var vertexC = new Point(-7, 4);
-      	var triangle = new Triangle(vertexA, vertexB, vertexC);
-      	var perimeter = triangle.getPerimeter();
-        assert.equal(perimeter.toFixed(2), 34.23);
+      var triangle = new Triangle(vertexA, vertexB, vertexC);
+      var perimeter = triangle.getPerimeter();
+      assert.equal(perimeter.toFixed(2), 34.23);
     });
   });
 });

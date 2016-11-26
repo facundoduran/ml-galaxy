@@ -1,44 +1,108 @@
 const daysInYears = 365;
-var forecastMetricsConst = require('../lib/ForecastConst');
-var forecastMetrics = forecastMetricsConst.forecastMetricsConst;
+var forecastConditionsLib = require('../lib/ForecastConst');
+var forecastConditions = forecastConditionsLib.forecastConditions;
 
 var mongoose = require('mongoose');
 var Forecast = mongoose.model('Forecast');
 
-var weatherController = function (weatherService) {
-	this.weatherService = weatherService;
-}
-
-weatherController.prototype.predictDay = function (req, resp) {
+module.exports.predictDay = function (req, resp) {
 	var day = req.params.day;
-	return resp.json(this.weatherService.predictDay(day));
+
+	var forecast = Forecast.findOne({ 'day': day });
+	forecast.exec(function (err, forecastDay) {
+		if (err) {
+			resp.status(500);
+            resp.json({
+                type: false,
+                data: "Error occured: " + err
+            });
+		}
+		resp.status(200);
+		return resp.json(forecastDay);
+	});
+};
+
+module.exports.predictYears = function (req, resp) {
+	var days = req.params.year * daysInYears;
+	
+	var forecasts = Forecast.find()
+		.where('day').lte(days);
+
+	forecasts.exec(function (err, forecast){
+		if (err) {
+			resp.status(500);
+            resp.json({
+                type: false,
+                data: "Error occured: " + err
+            });			
+		};
+
+		resp.status(200);
+		return resp.json(forecast);
+	});
+};
+
+module.exports.getDroughtPeriods = function (req, resp) {	
+	var forecastQuery = Forecast.find({ 'weather': forecastConditions.drought });
+
+	forecastQuery.count(function (err, forecast){
+		if (err) {
+			resp.status(500);
+            resp.json({
+                type: false,
+                data: "Error occured: " + err
+            });			
+		};
+
+		resp.status(200);
+		return resp.json(forecast);
+	});
+};
+
+module.exports.getRainPeriods = function (req, resp) {
+	var forecastQuery = Forecast.find({ 'weather': forecastConditions.rainy });
+		
+	forecastQuery.count(function (err, forecast){
+		if (err) {
+			resp.status(500);
+            resp.json({
+                type: false,
+                data: "Error occured: " + err
+            });			
+		};
+
+		resp.status(200);
+		return resp.json(forecast);
+	});	
+};
+
+module.exports.getMaxRainDay = function (req, resp) {
+	var forecastQuery = Forecast.find({ weather: forecastConditions.rainy })
+		.sort({ 'peak' : -1})
+		.limit(1)
+		.exec(function (err, forecast) {
+			if (err) {
+				return resp.status(500).send(err.errorMessage);
+			}
+				
+			resp.status(200);
+			return resp.json(forecast);
+		});
 }
 
-weatherController.prototype.predictYears = function (req, resp) {
-	var year = req.params.year * daysInYears;
-	return resp.json(this.weatherService.predictYears());
-}
+module.exports.getOptimalConditions = function (req, resp) {
+	var forecastQuery = Forecast.find({ 'weather': forecastConditions.optimal });
+		
+	forecastQuery.count(function (err, forecast){
+		if (err) {
+			resp.status(500);
+            resp.json({
+                type: false,
+                data: "Error occured: " + err
+            });
+		};
 
-weatherController.prototype.getDroughtPeriods = function (req, resp) {
-	return resp.json(this.weatherService.getDroughtPeriods);
-}
-
-weatherController.prototype.getRainPeriods = function (req, resp) {
-	return resp.json(this.weatherService.getRainPeriods);
-}
-
-weatherController.prototype.getOptimalConditions = function (req, resp) {
-	return resp.json(this.weatherService.getOptimalConditions);
-}
-
-weatherController.prototype.getMaxPeakRain = function (req, resp) {
-	var day = req.params.day;
-	var maxPeakRain = this.weatherService.getMaxPeakRain();
-	return resp.json(maxPeakRain);
-}
-
-weatherController.prototype.handleError = function() {
-	response.send(500);
-}
-
-module.exports = weatherController;
+		resp.status(200);
+		return resp.json(forecast);
+	});
+};

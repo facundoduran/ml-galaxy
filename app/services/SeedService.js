@@ -29,6 +29,7 @@ seedService.prototype.predictAll = function () {
 seedService.prototype.generatePredictions = function (days) {
 	var day = 0;
 	var maxArea = 0;
+	var maxDay = 0;
 
 	for(day = 1; day <= days; day++) {
 		var ferengiPosition = this.ferengi.getPosition(day);
@@ -40,12 +41,11 @@ seedService.prototype.generatePredictions = function (days) {
 		if (prediction === forecastConditions.rainy) {
 			var area = this.astronomic.getPlanetsArea(ferengiPosition, betasoidePosition, vulcanoPosition);
 
-			if (area > maxArea) {
-				maxArea = area;
-			}
+			this.predictions.push({ day:day, weather: prediction, peak: area });
 		}
-
-		this.predictions.push( {day:day, prediction: prediction, maxPeak: maxArea });
+		else {
+			this.predictions.push({ day:day, weather: prediction });
+		}
 	}
 };
 

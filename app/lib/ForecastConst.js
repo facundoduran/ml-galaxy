@@ -5,9 +5,4 @@ var forecastConditions =  {
 	rainy : 'RAINY'
 };
 
-var forecastMetrics = {
-	maxRain : 'MAXRAIN'
-}
-
 module.exports.forecastConditions = forecastConditions;
-module.exports.forecastMetrics = forecastMetrics;

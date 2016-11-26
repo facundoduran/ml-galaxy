@@ -1,5 +1,3 @@
-var _seedService;
-
 var mongoose = require('mongoose');
 var Forecast = mongoose.model('Forecast');
 
@@ -8,18 +6,27 @@ var seedService = require('../services/SeedService');
 module.exports.generateData = function (req, resp) {
 	seedService.predictAll();
 	var predictions = seedService.getPredictions();
+	var hasErrors;
+	var errorMessage;
 
-	var forecast = new Forecast({
-		day: predictions[0].day,
-		weather: predictions[0].prediction,
-		maxPeak: predictions[0].maxPeak
-	});
+	predictions.forEach(function(prediction) {
+       	var forecast = new Forecast({
+			day: prediction.day,
+			weather: prediction.weather,
+			peak: prediction.peak
+		});
 
-	forecast.save(function(err, forecast) {
-        if (err) {
-    		return res.status(500).send( err.message);
-		}
+		forecast.save(function (err, forecast){
+			if (err) {
+				hasErrors = true;
+				errorMessage = err;
+			};
+		});
+    });
 
-    	res.status(200).jsonp(forecast);
-	});
+	if (hasErrors) {	
+		return res.status(500).send(errorMessage.message);
+	};
+
+    return resp.json(200);
 };
