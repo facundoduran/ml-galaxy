@@ -34,7 +34,7 @@ GET -https://ml-galaxy.herokuapp.com/api/predict/years/5
 GET -https://ml-galaxy.herokuapp.com/api/predict/getDroughtPeriods 
 
 ###### Url que obtiene la cantidad de periodos de lluvia
-GET -https://ml-galaxy.herokuapp.com/api/predict/getRainyPeriods
+GET -https://ml-galaxy.herokuapp.com/api/predict/getRainPeriods
 
 ###### Url que obtiene el día con el pico de lluvia
 GET -https://ml-galaxy.herokuapp.com/api/predict/getMaxRainDay
