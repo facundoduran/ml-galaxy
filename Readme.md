@@ -13,6 +13,7 @@ La API REST se encuentra deployada en Heroku.
 ```
 	git clone https://github.com/facundoduran/ml-galaxy.git
 ```
+#### Actualizar las dependencias.
 
 ```
 	npm install
@@ -21,22 +22,22 @@ La API REST se encuentra deployada en Heroku.
 #### Urls
 
 ###### Batch job que genera los datos
-[https://ml-galaxy.herokuapp.com/api/seed]
+POST - https://ml-galaxy.herokuapp.com/api/seed
 
 ###### Url obtiene la predicción para un día
-[https://ml-galaxy.herokuapp.com/api/predict/day/50]
+GET -https://ml-galaxy.herokuapp.com/api/predict/day/50
 
 ###### Url que obtiene la prediccion para los proximos N años:
-[https://ml-galaxy.herokuapp.com/api/predict/years/5]
+GET -https://ml-galaxy.herokuapp.com/api/predict/years/5
 
 ###### Url que obtiene la cantidad de periodos de sequia
-[https://ml-galaxy.herokuapp.com/api/predict/getDroughtPeriods ]
+GET -https://ml-galaxy.herokuapp.com/api/predict/getDroughtPeriods 
 
 ###### Url que obtiene la cantidad de periodos de lluvia
-[https://ml-galaxy.herokuapp.com/api/predict/getRainyPeriods]
+GET -https://ml-galaxy.herokuapp.com/api/predict/getRainyPeriods
 
 ###### Url que obtiene el día con el pico de lluvia
-[https://ml-galaxy.herokuapp.com/api/predict/getMaxRainDay]
+GET -https://ml-galaxy.herokuapp.com/api/predict/getMaxRainDay
 
 ###### Url que obtiene la cantidad de periodos de condiciones optimas
-[https://ml-galaxy.herokuapp.com/api/predict/getOptimalConditions]
+GET -https://ml-galaxy.herokuapp.com/api/predict/getOptimalConditions
